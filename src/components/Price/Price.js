@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import '../Price/Price.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Button} from 'react-bootstrap';
 
 class Price extends Component {
     constructor(props){
@@ -30,7 +32,10 @@ class Price extends Component {
                 <span>
                     {this.state.count}
                 </span>
-                <button onClick={this.changeValue}>Change the currency</button>
+                <Button 
+                variant="primary"
+                onClick={this.changeValue}
+                >Change the currency</Button>
             </b>
         )
     }
