@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-//import Task from './task/Task';
+// import Task from './task/Task';
 import idGenerator from '../../helpers/idGenerator';
 import { Container, Row, Col, FormControl, InputGroup, Button, Card } from 'react-bootstrap';
-import styles from './todoStyle.module.css';
+import styles from './todo.modules.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
@@ -53,13 +53,14 @@ class ToDo extends Component {
         const {tasks, inputValue} = this.state;
         const tasksArray = tasks.map((task) => {
             return (
-                <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Col key={task._id}>
                     <Card className={styles.task}>
                         <Card.Body>
                             <Card.Title>{task.text}</Card.Title>
                             <Card.Text>
                                 {task.text}
                             </Card.Text>
+                            <div className='btnWrapper'>
                             <Button variant="warning" className={styles.actionButton}>
                             <FontAwesomeIcon icon={faEdit} />
                             </Button>
@@ -71,6 +72,7 @@ class ToDo extends Component {
                             >
                             <FontAwesomeIcon icon={faTrash} />
                             </Button>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -81,12 +83,12 @@ class ToDo extends Component {
         return (
             <div className={styles.toDo}>
                 <Container>
-                    <Row className='justify-content-center'>
-                        <Col sm={10} xs={12} md={8} lg={6}>
+                    <Row>
+                        <Col>
                             <InputGroup className={styles.input}>
                                 <FormControl
-                                    placeholder="Input new task"
-                                    aria-label="Input new task"
+                                    placeholder="Add new task"
+                                    aria-label="Add new task"
                                     aria-describedby="basic-addon2"
                                     onChange={this.handleInputChange}
                                     onKeyDown = {this.handleKeyDown}
@@ -94,7 +96,7 @@ class ToDo extends Component {
                                 />
                                 <InputGroup.Append>
                                     <Button 
-                                    variant="primary"
+                                    variant="outline-primary"
                                     onClick={this.addTask}
                                     disabled = {!inputValue}
                                     >
@@ -106,7 +108,7 @@ class ToDo extends Component {
 
                     </Row>
 
-                    <Row>
+                    <Row className={styles.cardBox}>
                         {tasksArray}
                     </Row>
                 </Container>

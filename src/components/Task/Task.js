@@ -1,6 +1,6 @@
 import React from 'react';
-import classes from './taskStyle.module.css';
-import styles from './taskStyle.module.css';
+import classes from './task.modules.css';
+import styles from './task.modules.css';
 
 function Task(props){
         return (
