@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Product from './components/Product/Product';
 import ToDo from './components/ToDo/ToDo';
 
