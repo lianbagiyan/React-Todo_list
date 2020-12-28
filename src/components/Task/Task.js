@@ -32,9 +32,9 @@ class Task extends PureComponent{
                                 type='checkbox' 
                                 onClick = {this.handleCheck}
                                 />
-                                <Card.Title>{task.text.slice(0, 10) + '...'}</Card.Title>
+                                <Card.Title>{task.title}</Card.Title>
                                 <Card.Text>
-                                    {task.text}
+                                    {task.description}
                                 </Card.Text>
                                 <Button 
                                 variant="warning" 

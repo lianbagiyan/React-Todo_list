@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import Task from '../Task/Task';
-import idGenerator from '../../helpers/idGenerator';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AddTask from '../AddTask/AddTask';
 import Confirm from '../Confirm';
@@ -15,24 +14,77 @@ class ToDo extends PureComponent {
         editTask: null
     };
 
-    addTask = (value) => {
+    componentDidMount() {
+        fetch("http://localhost:3001/task")
+            .then((res) => res.json())
+            .then(response => {
+                if (response.error) {
+                    throw response.error;
+                }
 
-        const newTask = {
-            text: value,
-            _id: idGenerator()
-        };
+                this.setState({
+                    tasks: response
+                });
 
-        const tasks = [newTask, ...this.state.tasks];
-        this.setState({
-            tasks: tasks
-        });
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    addTask = (data) => {
+        const body = JSON.stringify(data);
+
+        fetch('http://localhost:3001/task',{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: body 
+        })
+        .then((res)=>res.json())
+        .then(response =>{
+            if(response.error){
+                throw response.error;
+            }
+            console.log(response)
+
+            const tasks = [response, ...this.state.tasks];
+            this.setState({
+                tasks: tasks
+            });
+
+
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+
     };
 
     removeTask = (taskId) => {
-        const newTasks = this.state.tasks.filter(task => task._id !== taskId);
-        this.setState({
-            tasks: newTasks
-        });
+
+        fetch(`http://localhost:3001/task/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then((res) => res.json())
+            .then(response => {
+                if (response.error) {
+                    throw response.error;
+                }
+
+                const newTasks = this.state.tasks.filter(task => task._id !== taskId);
+                this.setState({
+                    tasks: newTasks
+                });
+
+            })
+            .catch((error) => {
+                console.log( error)
+            });
     };
 
     handleCheck = (taskId) => {
@@ -51,19 +103,41 @@ class ToDo extends PureComponent {
     };
 
     removeSelected = () => {
-        let tasks = [...this.state.tasks];
 
-        this.state.selectedTasks.forEach((id) => {
-            tasks = tasks.filter((task) => task._id !== id);
-        });
+        const body = {
+            tasks: [...this.state.selectedTasks]
+        };
+        fetch(`http://localhost:3001/task`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        })
+            .then((res) => res.json())
+            .then(response => {
+                if (response.error) {
+                    throw response.error;
+                }
 
-        this.setState({
-            tasks,
-            selectedTasks: new Set(),
-            showConfirm: false
-        });
+                let tasks = [...this.state.tasks];
 
+                this.state.selectedTasks.forEach((id) => {
+                    tasks = tasks.filter((task) => task._id !== id);
+                });
+
+                this.setState({
+                    tasks,
+                    selectedTasks: new Set(),
+                    showConfirm: false
+                });
+
+            })
+            .catch((error) => {
+                console.log("ToDo -> error", error)
+            });
     };
+
 
     toggleConfirm = () => {
         this.setState({
