@@ -6,7 +6,7 @@ import styles from './navMenuStyle.module.css';
 export default function NavMenu() {
 
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar className={styles.navMenu} expand="lg">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
@@ -30,7 +30,7 @@ export default function NavMenu() {
                     <NavLink
                         to='/contact'
                         exact
-                        activeStyle={{ color: 'red' }}
+                        activeClassName={styles.activePage}
                         className={styles.navLink}
                     >
                         Contact

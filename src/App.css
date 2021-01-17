@@ -1,4 +1,13 @@
 .App {
   text-align: center;
+  background-image: linear-gradient(#d0d8d5, #5e827c);
 }
 
+.wrapper{
+  padding: 4px;
+  background: rgb(25, 33, 148);
+}
+
+#root {
+  height: 100vh;
+}

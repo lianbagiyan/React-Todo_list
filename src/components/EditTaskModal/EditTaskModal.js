@@ -1,11 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import {Button, Modal, FormControl} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './editTaskModalStyle.module.css';
+import {connect} from 'react-redux';
+import {editTask} from '../../store/actions';
 
-export default class EditTaskModal extends Component{
+class EditTaskModal extends Component{
   constructor(props){
     super(props);
  const {date} = props.data;
@@ -14,7 +16,15 @@ export default class EditTaskModal extends Component{
       ...props.data,
       date: date ? new Date(date): new Date()
     };
+
+this.titleRef = createRef(null);
   }
+
+componentDidMount(){
+  this.titleRef.current.focus();
+}
+
+
 
   handleChange = (event) => {
     const {name, value} = event.target;
@@ -36,7 +46,7 @@ export default class EditTaskModal extends Component{
       date: date.toISOString().slice(0, 10)
     };
 
-    this.props.onSave(editedTask);
+    this.props.editTask(editedTask, this.props.from);
   }
 
   handleDateChange = (date)=>{
@@ -55,16 +65,17 @@ export default class EditTaskModal extends Component{
                 onHide={onClose}
                 centered
             >
-                <Modal.Header closeButton>
+                <Modal.Header closeButton className={styles.editTaskContainer}>
                     <Modal.Title>Edit task</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={styles.editTaskContainer}>
                     <FormControl
                         placeholder="Title"
                         name = "title"
                         value = {title}
                         onChange={this.handleChange}
                         onKeyDown={this.handleKeyDown}
+                        ref = {this.titleRef}
                     />
 
                     <textarea 
@@ -85,11 +96,11 @@ export default class EditTaskModal extends Component{
                     />
 
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={this.handleSave}>
+                <Modal.Footer className={styles.editTaskContainer}>
+                    <Button variant="dark" onClick={this.handleSave}>
                         Save
             </Button>
-                    <Button variant="secondary" onClick={onClose}>
+                    <Button variant="light" onClick={onClose}>
                         Cancel
             </Button>
                 </Modal.Footer>
@@ -101,6 +112,11 @@ export default class EditTaskModal extends Component{
 
 EditTaskModal.propTypes = {
     data: PropTypes.object.isRequired,
-    onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired
 };
+
+const mapDispatchToProps = {
+  editTask
+}
+
+export default connect(null, mapDispatchToProps)(EditTaskModal);

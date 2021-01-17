@@ -2,9 +2,36 @@
     margin: 10px auto;
 }
 
+.card {
+    background-color: #a1ccac;
+    box-shadow: 2px 0px 14px #4845459c;
+    border: none;
+    margin: 10px;
+}
+
 .selected{
     border: 1px solid #f00;
 }
-.actionButton{
-    margin: 5px;
+/* .actionButton{
+    margin: 0 5px;
+} */
+
+.date{
+    font-size: 14px;
+}
+.status{
+    color: maroon;
+}
+
+.titleLine {
+    color: #16a951;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 22px;
+    text-decoration: revert;
+}
+
+.btnsContainer {
+    display: flex;
+    justify-content: center;
 }

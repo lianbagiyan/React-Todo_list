@@ -1,40 +1,28 @@
 import React, { PureComponent } from 'react';
 import { formatDate } from '../../../helpers/utils';
-import Spinner from '../../Spinner/Spinner';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import EditTaskModal from '../../EditTaskModal/EditTaskModal';
+import { connect } from 'react-redux';
+import { getSingleTask, removeTask } from '../../../store/actions';
 
-export default class SingleTask extends PureComponent {
+class SingleTask extends PureComponent {
     state = {
-        task: null,
         openEditModal: false
     };
 
     componentDidMount() {
         const taskId = this.props.match.params.id;
+        this.props.getSingleTask(taskId);
+    }
 
-        fetch(`http://localhost:3001/task/${taskId}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then((res) => res.json())
-            .then(response => {
-                if (response.error) {
-                    throw response.error;
-                }
-
-                this.setState({
-                    task: response
-                });
-
-            })
-            .catch((error) => {
-                console.log("ToDo -> error", error)
+    componentDidUpdate(prevProps){
+        if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
+            this.setState({
+                openEditModal: false
             });
+        }
     }
 
     onRemove = () => {
@@ -66,36 +54,11 @@ export default class SingleTask extends PureComponent {
         });
     };
 
-    saveTask = (editedTask) => {
-
-        fetch(`http://localhost:3001/task/${editedTask._id}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(editedTask)
-        })
-            .then((res) => res.json())
-            .then(response => {
-
-                if (response.error) {
-                    throw response.error;
-                }
-
-                this.setState({
-                    task: response,
-                    openEditModal: false
-                });
-
-            })
-            .catch((error) => {
-                console.log("ToDo -> error", error)
-            });
-
-    };
 
     render() {
-        const { task, openEditModal } = this.state;
+        const { openEditModal } = this.state;
+        const {task} = this.props;
+        const historyPush = this.props.history.push;
         return (
             <>
                 {!!task ?
@@ -107,7 +70,6 @@ export default class SingleTask extends PureComponent {
 
                         <Button
                             variant="warning"
-                            // className={styles.actionButton}
                             onClick={this.toogleEditModal}
                         >
                             <FontAwesomeIcon icon={faEdit} />
@@ -115,21 +77,22 @@ export default class SingleTask extends PureComponent {
 
                         <Button
                             variant="danger"
-                            // className={styles.actionButton}
-                            onClick={this.onRemove}
+                            onClick={()=>this.props.removeTask(task._id, "single", historyPush)}
                         >
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
 
 
                     </div> :
-                    <Spinner />}
+                    <h3>No task found !!!</h3>
+                }
 
 
                 {
                     openEditModal &&
                     <EditTaskModal
                         data={task}
+                        from = 'single'
                         onSave={this.saveTask}
                         onClose={this.toogleEditModal}
                     />
@@ -139,3 +102,17 @@ export default class SingleTask extends PureComponent {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        task: state.task,
+        editTaskSuccess: state.editTaskSuccess,
+    };
+};
+
+const mapDispatchToProps = {
+    getSingleTask,
+    removeTask
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleTask);
