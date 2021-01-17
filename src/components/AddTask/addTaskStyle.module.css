@@ -6,3 +6,7 @@
     width: 100%;
     margin: 15px 0;
 }
+
+.taskContainer {
+    background-color: #539278 !important;
+}

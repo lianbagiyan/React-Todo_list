@@ -4,14 +4,26 @@ import styles from './addTaskStyle.module.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {addTask} from '../../store/actions';
 
-export default class AddTask extends Component {
+class AddTask extends Component {
+constructor(props){
+    super(props);
 
-    state = {
+    this.state = {
         title: '',
         description: '',
         date: new Date()
     };
+
+    this.titleRef = React.createRef(null);
+}
+
+componentDidMount(){
+    this.titleRef.current.focus();
+}
+
 
     handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -45,7 +57,7 @@ export default class AddTask extends Component {
             date: date.toISOString().slice(0, 10)
         };
 
-        this.props.onAdd(task);
+        this.props.addTask(task);
     };
 
 
@@ -58,15 +70,14 @@ export default class AddTask extends Component {
                     onHide={onClose}
                     centered
                 >
-                    <Modal.Header closeButton>
+                    <Modal.Header closeButton className={styles.taskContainer}>
                         <Modal.Title>Add new task</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body className={styles.taskContainer}>
                         <FormControl
                             placeholder="Title"
                             name = "title"
-                            /* onChange={this.handleChange} */
-                            /* onChange={(event)=> this.handleChange(event, 'title')} */
+                            ref = {this.titleRef}
                             onChange={this.handleChange}
                             onKeyDown={this.handleKeyDown}
                         />
@@ -87,13 +98,13 @@ export default class AddTask extends Component {
                         />
 
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={this.addTask}>
+                    <Modal.Footer className={styles.taskContainer}>
+                        <Button variant="dark" onClick={this.addTask}>
                             Add
-                </Button>
-                        <Button variant="secondary" onClick={onClose}>
+                        </Button>
+                        <Button variant="light" onClick={onClose}>
                             Cancel
-                </Button>
+                        </Button>
                     </Modal.Footer>
                 </Modal>
 
@@ -102,6 +113,10 @@ export default class AddTask extends Component {
 }
 
 AddTask.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    onAdd: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired
 };
+
+const mapDispatchToProps = {
+    addTask
+};
+export default connect(null, mapDispatchToProps)(AddTask);

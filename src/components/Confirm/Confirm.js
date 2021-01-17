@@ -1,17 +1,18 @@
 import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import styles from './confirm.module.css';
 
 export default function Confirm(props){
 
     return (
 
       <Modal show={true} onHide={props.onClose} centered>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className={styles.confirmContainer}>
           <Modal.Title>Are you sure to remove {props.count} tasks</Modal.Title>
         </Modal.Header>
         
-        <Modal.Footer>
+        <Modal.Footer className={styles.confirmContainer}>
           <Button variant="danger" onClick={props.onSubmit}>
             Submit
           </Button>

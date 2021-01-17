@@ -1,6 +1,20 @@
 .activePage{
-    color: red
+    color: rgb(214 67 67) !important;
 }
 .navLink{
-    margin: 0 10px;
+    margin: 0 15px;
+    font-size: 18px;
+    color: rgb(226, 220, 220);
+    font-weight: 700;
+}
+
+.navLink:hover {
+    color: rgb(214 67 67);
+    text-shadow: 3px -1px 4px #c13a3a;
+    text-decoration: none;
+}
+
+.navMenu {
+    background-color: #544e4e;
+    padding: 10px;
 }

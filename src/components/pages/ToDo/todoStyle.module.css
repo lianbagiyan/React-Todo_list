@@ -1,3 +1,17 @@
 .toDo{
     padding: 15px;
 }
+
+.addBtnBox, .removeSelectedBox {
+    display: flex;
+    justify-content: center;
+    padding: 45px;
+}
+
+.addBtn, .removeSelected {
+    font-size: 17px;
+    letter-spacing: 2px;
+    font-weight: 500;
+}
+
+

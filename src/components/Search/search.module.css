@@ -1,0 +1,30 @@
+.searchNav {
+    background-color: #7cbb7c;
+}
+
+.contentBody{
+    background-image: linear-gradient(to right, #5d5757 , #9ac19a);
+}
+
+.dateOptionContainer {
+    display: flex;
+    padding: 25px;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+}
+
+.dateOptBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchBtn{
+    margin: 10px;
+}
