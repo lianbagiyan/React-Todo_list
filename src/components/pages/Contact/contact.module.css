@@ -1,0 +1,48 @@
+.contactForm {
+    display: flex;
+    justify-content: center;
+    padding: 100px 0;
+    background-color: #dde8e0;
+}
+
+.formSection {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 40px;
+}
+
+.labelText {
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+    font-size: 15px;
+    color: #3a3333;
+}
+
+.inputLine {
+    width: 100%;
+    padding: 7px 17px;
+    margin: 5px 0;
+    border: 1px solid #908989;
+}
+
+.textAreaLine {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0;
+    border: 1px solid #908989;
+}
+
+.formBtn {
+    background-color: #4a4e4a;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    letter-spacing: 3px;
+}
