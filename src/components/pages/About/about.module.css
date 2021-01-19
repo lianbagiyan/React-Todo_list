@@ -33,3 +33,20 @@
     font-weight: 700;
     font-size: 20px;
 }
+
+.codeLink {
+    color: #bfefcb;
+    text-decoration: revert;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+@media screen and (max-width: 600px) {
+    .sitePic{
+        width: 320px;
+    }
+
+    .aboutTextDesc {
+        width: 320px;
+    }
+}

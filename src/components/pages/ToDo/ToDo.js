@@ -1,181 +1,174 @@
-import React, { PureComponent } from 'react';
-import Task from '../../Task/Task';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import AddTask from '../../AddTask/AddTask';
-import Confirm from '../../Confirm/Confirm';
-import EditTaskModal from '../../EditTaskModal/EditTaskModal';
-import Search from '../../Search/Search';
-import styles from './todoStyle.module.css';
-import { connect } from 'react-redux';
-import { getTasks, removeSelected } from '../../../store/actions';
+import React, { PureComponent } from "react";
+import Task from "../../Task/Task";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import AddTask from "../../AddTask/AddTask";
+import Confirm from "../../Confirm/Confirm";
+import EditTaskModal from "../../EditTaskModal/EditTaskModal";
+import Search from "../../Search/Search";
+import styles from "./todoStyle.module.css";
+import { connect } from "react-redux";
+import { getTasks, removeSelected } from "../../../store/actions";
 
 class ToDo extends PureComponent {
-    state = {
+  state = {
+    selectedTasks: new Set(),
+    showConfirm: false,
+    editTask: null,
+    openNewTaskModal: false,
+  };
+
+  componentDidMount() {
+    this.props.getTasks();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.addTaskSuccess && this.props.addTaskSuccess) {
+      this.toggleNewTaskModal();
+    }
+
+    if (!prevProps.removeTasksSuccess && this.props.removeTasksSuccess) {
+      this.setState({
         selectedTasks: new Set(),
         showConfirm: false,
+      });
+    }
+
+    if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
+      this.setState({
         editTask: null,
-        openNewTaskModal: false
-    };
+      });
+    }
+  }
 
-    componentDidMount() {
-        this.props.getTasks();
+  handleCheck = (taskId) => {
+    const selectedTasks = new Set(this.state.selectedTasks);
+    if (selectedTasks.has(taskId)) {
+      selectedTasks.delete(taskId);
+    } else {
+      selectedTasks.add(taskId);
     }
 
-    componentDidUpdate(prevProps) {
-        if (!prevProps.addTaskSuccess && this.props.addTaskSuccess) {
-            this.toggleNewTaskModal();
-        }
+    this.setState({
+      selectedTasks,
+    });
+  };
 
-        if (!prevProps.removeTasksSuccess && this.props.removeTasksSuccess) {
-            this.setState({
-                selectedTasks: new Set(),
-                showConfirm: false
-            });
-        }
+  removeSelected = () => {
+    const taskIds = [...this.state.selectedTasks];
+    this.props.removeSelected(taskIds);
+  };
 
-        if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
-            this.setState({
-                editTask: null
-            });
-        }
-    }
+  toggleConfirm = () => {
+    this.setState({
+      showConfirm: !this.state.showConfirm,
+    });
+  };
 
-    handleCheck = (taskId) => {
-        const selectedTasks = new Set(this.state.selectedTasks);
-        if (selectedTasks.has(taskId)) {
-            selectedTasks.delete(taskId);
-        }
-        else {
-            selectedTasks.add(taskId);
-        }
+  toogleEditModal = (task) => {
+    this.setState({
+      editTask: task,
+    });
+  };
 
-        this.setState({
-            selectedTasks
-        });
+  toggleNewTaskModal = () => {
+    this.setState({
+      openNewTaskModal: !this.state.openNewTaskModal,
+    });
+  };
 
-    };
+  render() {
+    const {
+      selectedTasks,
+      showConfirm,
+      editTask,
+      openNewTaskModal,
+    } = this.state;
 
-    removeSelected = () => {
-        const taskIds = [...this.state.selectedTasks];
-        this.props.removeSelected(taskIds);
-    };
+    const tasksArray = this.props.tasks.map((task) => {
+      return (
+        <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Task
+            data={task}
+            onCheck={this.handleCheck}
+            disabled={!!selectedTasks.size}
+            onEdit={this.toogleEditModal}
+          />
+        </Col>
+      );
+    });
 
-    toggleConfirm = () => {
-        this.setState({
-            showConfirm: !this.state.showConfirm
-        });
-    }
+    return (
+      <div className={styles.toDo}>
+        <Container>
+          <Search />
 
-    toogleEditModal = (task) => {
-        this.setState({
-            editTask: task
-        });
-    }
+          <Row
+            className="justify-content-center text-center"
+            className={styles.addBtnBox}
+          >
+            <Col sm={10} xs={12} md={8} lg={6}>
+              <Button
+                variant="dark"
+                className={styles.addBtn}
+                onClick={this.toggleNewTaskModal}
+                disabled={!!selectedTasks.size}
+              >
+                Add new task
+              </Button>
+            </Col>
+          </Row>
 
-    
-    toggleNewTaskModal = () => {
-        this.setState({
-            openNewTaskModal: !this.state.openNewTaskModal
-        });
-    };
+          <Row>{tasksArray}</Row>
+          <Row
+            className="justify-content-center"
+            className={styles.removeSelectedBox}
+          >
+            <Col sm={10} xs={12} md={8} lg={6}>
+              <Button
+                variant="danger"
+                onClick={this.toggleConfirm}
+                disabled={!selectedTasks.size}
+                className={styles.removeSelected}
+              >
+                Remove selected
+              </Button>
+            </Col>
+          </Row>
+        </Container>
 
-    render() {
-        const { selectedTasks, showConfirm, editTask, openNewTaskModal } = this.state;
+        {showConfirm && (
+          <Confirm
+            onSubmit={this.removeSelected}
+            onClose={this.toggleConfirm}
+            count={selectedTasks.size}
+          />
+        )}
+        {!!editTask && (
+          <EditTaskModal
+            data={editTask}
+            from="tasks"
+            onClose={() => this.toogleEditModal(null)}
+          />
+        )}
 
-        const tasksArray = this.props.tasks.map((task) => {
-            return (
-                <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <Task
-                        data={task}
-                        onCheck={this.handleCheck}
-                        disabled={!!selectedTasks.size}
-                        onEdit={this.toogleEditModal}
-                    />
-                </Col>
-            )
-        });
-
-
-        return (
-            <div className={styles.toDo}>
-                <Container>
-                    <Search/>
-
-                    <Row className='justify-content-center text-center' className={styles.addBtnBox}>
-                        <Col sm={10} xs={12} md={8} lg={6}>
-                            <Button
-                                variant="dark"
-                                className={styles.addBtn}
-                                onClick={this.toggleNewTaskModal}
-                                disabled={!!selectedTasks.size}
-                            >
-                                Add new task
-                            </Button>
-                        </Col>
-
-                    </Row>
-
-                    <Row>
-                        {tasksArray}
-                    </Row>
-                    <Row className='justify-content-center' className={styles.removeSelectedBox}>
-                        <Col sm={10} xs={12} md={8} lg={6} >
-                            <Button
-                                variant="danger"
-                                onClick={this.toggleConfirm}
-                                disabled={!selectedTasks.size}
-                                className={styles.removeSelected}
-                            >
-                                Remove selected
-                        </Button>
-                        </Col>
-                    </Row>
-                </Container>
-
-                {
-                    showConfirm &&
-                    <Confirm
-                        onSubmit={this.removeSelected}
-                        onClose={this.toggleConfirm}
-                        count={selectedTasks.size}
-                    />
-                }
-                {
-                    !!editTask &&
-                    <EditTaskModal
-                        data={editTask}
-                        from ='tasks'
-                        onClose={() => this.toogleEditModal(null)}
-                    />
-                }
-
-                { openNewTaskModal &&
-                    <AddTask
-                        onClose={this.toggleNewTaskModal}
-                    />
-                }
-
-
-            </div>
-        );
-    };
-
+        {openNewTaskModal && <AddTask onClose={this.toggleNewTaskModal} />}
+      </div>
+    );
+  }
 }
-
 
 const mapStateToProps = (state) => {
-    return {
-        tasks: state.tasks,
-        addTaskSuccess: state.addTaskSuccess,
-        removeTasksSuccess: state.removeTasksSuccess,
-        editTaskSuccess: state.editTaskSuccess
-    };
-}
-
+  return {
+    tasks: state.tasks,
+    addTaskSuccess: state.addTaskSuccess,
+    removeTasksSuccess: state.removeTasksSuccess,
+    editTaskSuccess: state.editTaskSuccess,
+  };
+};
 
 const mapDispatchToProps = {
-    getTasks,
-    removeSelected
+  getTasks,
+  removeSelected,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDo);

@@ -1,51 +1,49 @@
-import React from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
-import ToDo from './components/pages/ToDo/ToDo';
-import About from './components/pages/About/About';
-import NotFound from './components/pages/NotFound/NotFound';
-import NavMenu from './components/NavMenu/NavMenu';
-import Footer from './components/Footer/Footer';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import SingleTask from './components/pages/SingleTask/SingleTask';
-import Contact from './components/pages/Contact/Contact';
-import Spinner from './components/Spinner/Spinner';
-import { ToastContainer, toast } from 'react-toastify';
-import { connect } from 'react-redux';
+import React from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import ToDo from "./components/pages/ToDo/ToDo";
+import About from "./components/pages/About/About";
+import NotFound from "./components/pages/NotFound/NotFound";
+import NavMenu from "./components/NavMenu/NavMenu";
+import Footer from "./components/Footer/Footer";
+import { Route, Switch, Redirect } from "react-router-dom";
+import SingleTask from "./components/pages/SingleTask/SingleTask";
+import Contact from "./components/pages/Contact/Contact";
+import Spinner from "./components/Spinner/Spinner";
+import { ToastContainer, toast } from "react-toastify";
+import { connect } from "react-redux";
 
 function App(props) {
-
   const routes = [
     {
-      path: '/',
-      component: ToDo
+      path: "/",
+      component: ToDo,
     },
 
     {
-      path: '/contact',
-      component: Contact
+      path: "/contact",
+      component: Contact,
     },
     {
-      path: '/task',
-      component: ToDo
+      path: "/task",
+      component: ToDo,
     },
     {
-      path: '/task/:id',
-      component: SingleTask
+      path: "/task/:id",
+      component: SingleTask,
     },
     {
-      path: '/about',
-      component: About
+      path: "/about",
+      component: About,
     },
     {
-      path: '/404',
-      component: NotFound
-    }
+      path: "/404",
+      component: NotFound,
+    },
   ];
 
-
-const {errorMessage, successMessage, loading} = props;
+  const { errorMessage, successMessage, loading } = props;
 
   if (errorMessage) {
     toast.error(errorMessage);
@@ -60,18 +58,19 @@ const {errorMessage, successMessage, loading} = props;
       <NavMenu />
 
       <Switch>
-        {routes.map((item, index) =>
+        {routes.map((item, index) => (
           <Route
             path={item.path}
             exact
             component={item.component}
             key={index}
-          />)}
-        <Redirect to='/404' />
+          />
+        ))}
+        <Redirect to="/404" />
       </Switch>
 
       <Footer />
-      
+
       <ToastContainer
         position="bottom-left"
         autoClose={3000}
@@ -86,7 +85,6 @@ const {errorMessage, successMessage, loading} = props;
 
       {loading && <Spinner />}
     </div>
-
   );
 }
 
@@ -94,7 +92,7 @@ const mapStateToProps = (state) => {
   return {
     errorMessage: state.errorMessage,
     successMessage: state.successMessage,
-    loading: state.loading
+    loading: state.loading,
   };
 };
 

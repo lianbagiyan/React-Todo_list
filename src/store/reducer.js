@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from "./actionTypes";
 
 const defaultState = {
   tasks: [],
@@ -9,12 +9,11 @@ const defaultState = {
   editTaskSuccess: false,
   removeTasksSuccess: false,
   removeTaskSuccess: false,
-  loading: false
+  loading: false,
 };
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-
     case actionTypes.LOADING: {
       return {
         ...state,
@@ -25,26 +24,24 @@ const reducer = (state = defaultState, action) => {
         editTaskSuccess: false,
         errorMessage: null,
         successMessage: null,
-      }
+      };
     }
 
     case actionTypes.ERROR: {
       return {
         ...state,
         errorMessage: action.error,
-        loading: false
-
-      }
+        loading: false,
+      };
     }
 
     case actionTypes.GET_TASKS_SUCCESS: {
       return {
         ...state,
         tasks: action.tasks,
-        loading: false
-      }
+        loading: false,
+      };
     }
-
 
     case actionTypes.ADD_TASK_SUCCESS: {
       const tasks = [...state.tasks, action.task];
@@ -52,32 +49,32 @@ const reducer = (state = defaultState, action) => {
         ...state,
         tasks: tasks,
         loading: false,
-        successMessage: 'Task added successfully!',
-        addTaskSuccess: true
-      }
+        successMessage: "Task added successfully!",
+        addTaskSuccess: true,
+      };
     }
 
     case actionTypes.REMOVE_TASK_SUCCESS: {
-      if(action.from==="single"){
+      if (action.from === "single") {
         return {
           ...state,
           task: null,
           loading: false,
           removeTaskSuccess: true,
-          successMessage: 'Task removed successfully!',
-        }
-      }
-      else {
-         const newTasks = state.tasks.filter(task => task._id !== action.taskId);
+          successMessage: "Task removed successfully!",
+        };
+      } else {
+        const newTasks = state.tasks.filter(
+          (task) => task._id !== action.taskId
+        );
 
-      return {
-        ...state,
-        tasks: newTasks,
-        loading: false,
-        successMessage: 'Task removed successfully!',
+        return {
+          ...state,
+          tasks: newTasks,
+          loading: false,
+          successMessage: "Task removed successfully!",
+        };
       }
-      }
-     
     }
 
     case actionTypes.REMOVE_SELECTED_TASKS_SUCCESS: {
@@ -86,64 +83,63 @@ const reducer = (state = defaultState, action) => {
         tasks = tasks.filter((task) => task._id !== id);
       });
 
-
       return {
         ...state,
         tasks: tasks,
         loading: false,
         removeTasksSuccess: true,
-        successMessage: 'Tasks removed successfully!',
-      }
+        successMessage: "Tasks removed successfully!",
+      };
     }
 
     case actionTypes.EDIT_TASK_SUCCESS: {
-      
-      if (action.from === 'single') {
+      if (action.from === "single") {
         return {
           ...state,
           task: action.task,
           loading: false,
           editTaskSuccess: true,
-          successMessage: 'Task edited successfully!',
-        }
-      }
-      else {
+          successMessage: "Task edited successfully!",
+        };
+      } else {
         const tasks = [...state.tasks];
 
-        const foundTaskIndex = tasks.findIndex((task) => task._id === action.task._id);
+        const foundTaskIndex = tasks.findIndex(
+          (task) => task._id === action.task._id
+        );
         tasks[foundTaskIndex] = action.task;
         return {
           ...state,
           tasks: tasks,
           loading: false,
           editTaskSuccess: true,
-          successMessage: 'Task edited successfully!',
-        }
+          successMessage: "Task edited successfully!",
+        };
       }
     }
 
     case actionTypes.CHANGE_TASK_STATUS_SUCCESS: {
       let message;
-        if(action.task.status === 'done'){
-          message = 'Congratulations, the task completed!';
-        }
-        else {
-          message = 'The task is active now !';
-        }
+      if (action.task.status === "done") {
+        message = "Congratulations, the task completed!";
+      } else {
+        message = "The task is active now !";
+      }
 
-      if (action.from === 'single') {
+      if (action.from === "single") {
         return {
           ...state,
           task: action.task,
           loading: false,
           editTaskSuccess: true,
           successMessage: message,
-        }
-      }
-      else {
+        };
+      } else {
         const tasks = [...state.tasks];
 
-        const foundTaskIndex = tasks.findIndex((task) => task._id === action.task._id);
+        const foundTaskIndex = tasks.findIndex(
+          (task) => task._id === action.task._id
+        );
         tasks[foundTaskIndex] = action.task;
         return {
           ...state,
@@ -151,7 +147,7 @@ const reducer = (state = defaultState, action) => {
           loading: false,
           editTaskSuccess: true,
           successMessage: message,
-        }
+        };
       }
     }
 
@@ -159,13 +155,13 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         task: action.task,
-        loading: false
-      }
+        loading: false,
+      };
     }
 
-    default: return state;
+    default:
+      return state;
   }
-
-}
+};
 
 export { reducer };

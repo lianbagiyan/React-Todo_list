@@ -2,4 +2,51 @@
     width: 100%;
     padding: 40px;
     background-color: #544e4e;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.authorName {
+    color: #8ea09a;
+    letter-spacing: 1px;
+}
+
+.authorNameText {
+    letter-spacing: 5px;
+    color: #bfd2c7;
+    margin-top: 40px;
+}
+
+.aboutAuthor {
+    color: #bfd2c7;
+    margin-bottom: 35px;
+}
+
+.socialMediaBox {
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.socialMediaLink {
+    color: #b9e2e8;
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.socialMediaLink:hover {
+    color: #7f8e90;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.copyrightText {
+    margin-top: 40px;
+    font-size: 14px;
+    color: white;
 }

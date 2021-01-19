@@ -1,7 +1,8 @@
-.activePage{
+.activePage {
     color: rgb(214 67 67) !important;
 }
-.navLink{
+
+.navLink {
     margin: 0 15px;
     font-size: 18px;
     color: rgb(226, 220, 220);
